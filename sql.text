@@ -1,0 +1,71 @@
+CREATE TABLE IF NOT EXISTS `j_user`(
+   `userName` VARCHAR(100) NOT NULL,
+   `userPasswd` VARCHAR(100) NOT NULL,
+   `userType` VARCHAR(50) NOT NULL,
+   PRIMARY KEY ( `userName` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into j_user values ("tea","123","admin");
+
+CREATE TABLE IF NOT EXISTS `j_employee`(
+   `name` VARCHAR(100),
+   `userName` VARCHAR(100) NOT NULL,
+   `sex` VARCHAR(10),
+   `highestEducation` VARCHAR(50),
+   `status` VARCHAR(200),
+   `type` VARCHAR(50),
+   `email` VARCHAR(100),
+   `phone` VARCHAR(30),
+   `workYear` VARCHAR(50),
+   `city` VARCHAR(50),
+   `positionType` VARCHAR(30),
+   `positionName` VARCHAR(50),
+   `salarys` VARCHAR(50),
+   `myRemark` VARCHAR(10000),
+   CONSTRAINT user_employee FOREIGN KEY (userName) REFERENCES j_user (userName),
+   PRIMARY KEY ( `userName` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into j_employee(userName,myRemark) values ("tea","dd") ON DUPLICATE KEY UPDATE myRemark="ff";
+
+CREATE TABLE IF NOT EXISTS `j_employee_wokexp`(
+   `userName` VARCHAR(100) NOT NULL,
+   `companyName` VARCHAR(200) NOT NULL,
+   `positionName` VARCHAR(200) NOT NULL,
+   `startYear` VARCHAR(30) NOT NULL,
+   `startMonth` VARCHAR(30) NOT NULL,
+   `endYear` VARCHAR(30) NOT NULL,
+   `endMonth` VARCHAR(30) NOT NULL,
+   CONSTRAINT user_employee_workexp FOREIGN KEY (userName) REFERENCES j_user (userName),
+   PRIMARY KEY ( `userName` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `j_employee_edu`(
+   `userName` VARCHAR(100) NOT NULL,
+   `schoolName` VARCHAR(200) NOT NULL,
+   `education` VARCHAR(200) NOT NULL,
+   `professional` VARCHAR(50) NOT NULL,
+   `startYear` VARCHAR(30) NOT NULL,
+   `endYear` VARCHAR(30) NOT NULL,
+   CONSTRAINT user_employee_edu FOREIGN KEY (userName) REFERENCES j_user (userName),
+   PRIMARY KEY ( `userName` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `j_employee_project`(
+   `userName` VARCHAR(100) NOT NULL,
+   `projectName` VARCHAR(200) NOT NULL,
+   `startYear` VARCHAR(30) NOT NULL,
+   `startMonth` VARCHAR(30) NOT NULL,
+   `endYear` VARCHAR(30) NOT NULL,
+   `endMonth` VARCHAR(30) NOT NULL,
+   `projectRemark` VARCHAR(200) NOT NULL,
+   CONSTRAINT user_employee_workexp FOREIGN KEY (userName) REFERENCES j_user (userName),
+   PRIMARY KEY ( `userName` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+projectName:de
+		positionName:de
+		startYear:2014
+		startMonth:01
+		endYear:至今
+		endMonth:至今
+		projectRemark:dsadsa

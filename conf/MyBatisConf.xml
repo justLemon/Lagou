@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+   <!-- 配置映射类的别名 -->
+ 	<typeAliases>
+      <typeAlias alias="User" type="com.jobmanager.model.User"/> 
+      <typeAlias alias="Employee" type="com.jobmanager.model.Employee"/> 
+      <typeAlias alias="EmployeeEdu" type="com.jobmanager.model.EmployeeEdu"/> 
+      <typeAlias alias="EmployeeProject" type="com.jobmanager.model.EmployeeProject"/> 
+      <typeAlias alias="EmployeeWokExp" type="com.jobmanager.model.EmployeeWokExp"/> 
+   </typeAliases>  
+   <!-- 配置Mapper文件的路径 -->
+   <mappers>
+       <mapper resource="mapper/UserMapper.xml"/>
+   </mappers>
+</configuration>

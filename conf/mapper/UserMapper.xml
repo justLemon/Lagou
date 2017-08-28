@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jobmanager.mapper.UserMapper">	
+	<!--  查询用户  -->  
+    <select id="selectUserByName" parameterType="String" resultType="User">  
+       select * from j_user where userName = #{userName}  
+    </select>  
+    <!--  插入新用户  -->  
+    <insert id="addUser" parameterType="com.jobmanager.model.User">  
+        insert into j_user(userName,userPasswd,userType) values(#{userName},#{userPasswd},#{userType})  
+    </insert>
+    <!--  查询应聘者信息  -->  
+    <select id="findEmployeeByName" parameterType="String" resultType="Employee">  
+       select * from j_employee where userName = #{userName}  
+    </select> 
+    <!--  更新应聘者基本信息 -->  
+    <insert id="updateBasciInfo" parameterType="com.jobmanager.model.Employee">  
+        insert into j_employee(userName,name,sex,highestEducation,status,type,email,phone,workYear) 
+        values
+        (#{userName},#{name},#{sex},#{highestEducation},#{status},#{type},#{email},#{phone},#{workYear}) 
+        ON DUPLICATE KEY UPDATE  name=values(name), sex=values(sex),highestEducation=values(highestEducation),
+        status=values(status),type=values(type),email=values(email),phone=values(phone),workYear=values(workYear); 
+    </insert>
+    <!--  更新应聘者职位信息 -->  
+    <insert id="updateJobInfo" parameterType="com.jobmanager.model.Employee">  
+        insert into j_employee(userName,city,positionType,positionName,salarys) 
+        values
+        (#{userName},#{city},#{positionType},#{positionName},#{salarys}) 
+        ON DUPLICATE KEY UPDATE  city=values(city), positionType=values(positionType),positionName=values(positionName),
+        salarys=values(salarys); 
+    </insert>
+    <!--  更新应聘者个人描述信息 -->  
+    <insert id="updatePersonInfo" parameterType="com.jobmanager.model.Employee">  
+        insert into j_employee(userName,myRemark) 
+        values
+        (#{userName},#{myRemark}) 
+        ON DUPLICATE KEY UPDATE  myRemark=values(myRemark); 
+    </insert>
+    
+    <!--  查询应聘者教育信息  -->  
+    <resultMap id="employeeEdus" type="com.jobmanager.model.EmployeeEdu">
+      <id column="eduid" property="eduid"/>
+      <result column="schoolName" property="schoolName"/>
+      <result column="education" property="education"/>
+      <result column="professional" property="professional"/>
+      <result column="startYear" property="startYear"/>
+      <result column="endYear" property="endYear"/>
+    </resultMap>
+    <select id="findEmployeeEduByName" parameterType="String" resultMap="employeeEdus">  
+       select  eduid, schoolName, education, professional, startYear, endYear
+       from j_employee_edu where userName = #{userName}  
+    </select> 
+    <!--  删除应聘者教育信息 -->  
+    <delete id="deleteEmployeeEduById" parameterType="int">
+      delete from j_employee_edu where eduid = #{id}
+    </delete>
+    <!--  更新应聘者教育信息 -->  
+    <insert id="updateEmployeeEduInfo" parameterType="com.jobmanager.model.EmployeeEdu">  
+        insert into j_employee_edu(userName,schoolName,education,professional,startYear,endYear) 
+        values
+        (#{userName},#{schoolName},#{education},#{professional},#{startYear},#{endYear}) 
+        ON DUPLICATE KEY UPDATE  schoolName=values(schoolName),education=values(education),professional=values(professional),
+        startYear=values(startYear),endYear=values(endYear); 
+    </insert>
+    
+        <!--  查询应聘者项目经验信息  -->  
+    <resultMap id="employeeProjects" type="com.jobmanager.model.EmployeeProject">
+      <id column="projectid" property="projectid"/>
+      <result column="projectName" property="projectName"/>
+      <result column="positionName" property="positionName"/>
+      <result column="startMonth" property="startMonth"/>
+      <result column="endMonth" property="endMonth"/>
+      <result column="startYear" property="startYear"/>
+      <result column="endYear" property="endYear"/>
+      <result column="projectRemark" property="projectRemark"/>
+    </resultMap>
+    <select id="findEmployeeProjectByName" parameterType="String" resultMap="employeeProjects">  
+       select projectid,  projectName, positionName, startMonth, endMonth, startYear, endYear, projectRemark
+       from j_employee_project where userName = #{userName}  
+    </select> 
+   <!--  删除应聘者项目经验信息 -->  
+    <delete id="deleteEmployeeProjectById" parameterType="int">
+      delete from j_employee_project where projectid = #{id}
+    </delete>
+    <!--  更新应聘者项目经验信息 -->  
+    <insert id="updateEmployeeProjectInfo" parameterType="com.jobmanager.model.EmployeeProject">  
+        insert into j_employee_project(userName,projectName,positionName,startMonth,endMonth,startYear,endYear,projectRemark) 
+        values
+        (#{userName},#{projectName},#{positionName},#{startMonth},#{endMonth},#{startYear},#{endYear},#{projectRemark}) 
+        ON DUPLICATE KEY UPDATE  projectName=values(projectName),positionName=values(positionName),startMonth=values(startMonth),endMonth=values(endMonth),
+        startYear=values(startYear),endYear=values(endYear),projectRemark=values(projectRemark); 
+    </insert>
+    
+    
+    <!--  查询应聘者工作经验信息  -->  
+    <resultMap id="employeeWokExps" type="com.jobmanager.model.EmployeeWokExp">
+      <id column="expid" property="expid"/>
+      <result column="companyName" property="companyName"/>
+      <result column="startMonth" property="startMonth"/>
+      <result column="endMonth" property="endMonth"/>
+      <result column="startYear" property="startYear"/>
+      <result column="endYear" property="endYear"/>
+      <result column="positionName" property="positionName"/>
+    </resultMap>
+    <select id="findEmployeeWokExpByName" parameterType="String" resultMap="employeeWokExps">  
+       select expid, companyName, startMonth, endMonth, startYear, endYear, positionName 
+       from j_employee_wokexp where userName = #{userName}  
+    </select> 
+       <!--  删除应聘者工作经验信息 -->  
+    <delete id="deleteEmployeeWokExpById" parameterType="int">
+      delete from j_employee_wokexp where expid = #{id}
+    </delete>
+    <!--  更新应聘者工作经验信息 -->  
+    <insert id="updateEmployeeWokExpInfo" parameterType="com.jobmanager.model.EmployeeWokExp">  
+        insert into j_employee_wokexp(userName,companyName,startMonth,endMonth,startYear,endYear,positionName) 
+        values
+        (#{userName},#{companyName},#{startMonth},#{endMonth},#{startYear},#{endYear},#{positionName}) 
+        ON DUPLICATE KEY UPDATE  companyName=values(companyName),startMonth=values(startMonth),endMonth=values(endMonth),
+        startYear=values(startYear),endYear=values(endYear),positionName=values(positionName); 
+    </insert>
+</mapper>
