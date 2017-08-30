@@ -13,11 +13,23 @@
     <param-value>/WEB-INF/SpringConf.xml</param-value>
   </context-param>
   <servlet>
-    <description>This is the description of my J2EE component</description>
-    <display-name>This is the display name of my J2EE component</display-name>
     <servlet-name>LoginServlet</servlet-name>
-    <servlet-class>com.jobmanager.servlets.LoginServlet</servlet-class>
+	<servlet-class>com.jobmanager.servlets.LoginServlet</servlet-class>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+	<url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>RegisterServlet</servlet-name>
+	<servlet-class>com.jobmanager.servlets.RegisterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+	<url-pattern>/RegisterServlet</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>ResumeUpdate</servlet-name>
 	<servlet-class>com.jobmanager.servlets.ResumeServlet</servlet-class>
