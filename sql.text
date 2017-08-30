@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `j_employee`(
 insert into j_employee(userName,myRemark) values ("tea","dd") ON DUPLICATE KEY UPDATE myRemark="ff";
 
 CREATE TABLE IF NOT EXISTS `j_employee_wokexp`(
+   `expid` INT  auto_increment primary key,
    `userName` VARCHAR(100) NOT NULL,
    `companyName` VARCHAR(200) NOT NULL,
    `positionName` VARCHAR(200) NOT NULL,
@@ -34,38 +35,48 @@ CREATE TABLE IF NOT EXISTS `j_employee_wokexp`(
    `startMonth` VARCHAR(30) NOT NULL,
    `endYear` VARCHAR(30) NOT NULL,
    `endMonth` VARCHAR(30) NOT NULL,
-   CONSTRAINT user_employee_workexp FOREIGN KEY (userName) REFERENCES j_user (userName),
-   PRIMARY KEY ( `userName` )
+   CONSTRAINT user_employee_workexp FOREIGN KEY (userName) REFERENCES j_user (userName)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `j_employee_edu`(
+   `eduid` INT  auto_increment primary key,
    `userName` VARCHAR(100) NOT NULL,
    `schoolName` VARCHAR(200) NOT NULL,
    `education` VARCHAR(200) NOT NULL,
    `professional` VARCHAR(50) NOT NULL,
    `startYear` VARCHAR(30) NOT NULL,
    `endYear` VARCHAR(30) NOT NULL,
-   CONSTRAINT user_employee_edu FOREIGN KEY (userName) REFERENCES j_user (userName),
-   PRIMARY KEY ( `userName` )
+   CONSTRAINT user_employee_edu FOREIGN KEY (userName) REFERENCES j_user (userName)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `j_employee_project`(
+   `projectid` INT  auto_increment primary key,
    `userName` VARCHAR(100) NOT NULL,
    `projectName` VARCHAR(200) NOT NULL,
+   `positionName` VARCHAR(200) NOT NULL,
    `startYear` VARCHAR(30) NOT NULL,
    `startMonth` VARCHAR(30) NOT NULL,
    `endYear` VARCHAR(30) NOT NULL,
    `endMonth` VARCHAR(30) NOT NULL,
-   `projectRemark` VARCHAR(200) NOT NULL,
-   CONSTRAINT user_employee_workexp FOREIGN KEY (userName) REFERENCES j_user (userName),
-   PRIMARY KEY ( `userName` )
+   `projectRemark` VARCHAR(2000) NOT NULL,
+   CONSTRAINT user_employee_project FOREIGN KEY (userName) REFERENCES j_user (userName)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-projectName:de
-		positionName:de
-		startYear:2014
-		startMonth:01
-		endYear:至今
-		endMonth:至今
-		projectRemark:dsadsa
+CREATE TABLE IF NOT EXISTS `j_company`(
+   `userName` VARCHAR(100) NOT NULL,
+   `companyId` VARCHAR(50) NOT NULL,
+   `companyShortName` VARCHAR(200) DEFAULT NULL,
+   `companyFeatures` VARCHAR(200) DEFAULT NULL,
+   `labels` VARCHAR(200) DEFAULT NULL,
+   `city` VARCHAR(50) DEFAULT NULL,
+   `industryField` VARCHAR(30) DEFAULT NULL,
+   `companySize` VARCHAR(50) DEFAULT NULL,
+   `companyUrl` VARCHAR(200) DEFAULT NULL,
+   `product` VARCHAR(200) DEFAULT NULL,
+   `productUrl` VARCHAR(100) DEFAULT NULL,
+   `productProfile` VARCHAR(2000) DEFAULT NULL,
+   `companyProfile` VARCHAR(3000) DEFAULT NULL,
+   CONSTRAINT employer_company_info FOREIGN KEY (userName) REFERENCES j_user (userName)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
