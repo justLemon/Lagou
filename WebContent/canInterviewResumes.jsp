@@ -1,4 +1,15 @@
-﻿<%@ page language="java" import="java.util.*,com.jobmanager.model.User" pageEncoding="utf-8"%>
+<%@ page language="java" import="java.util.*,com.jobmanager.model.*,org.springframework.web.context.WebApplicationContext
+,org.springframework.web.context.support.WebApplicationContextUtils,com.jobmanager.dao.UserDao"
+	pageEncoding="utf-8"%>
+<% 
+    User user = (User)session.getAttribute("loginUser");
+	 if (user == null) {
+	  	response.sendRedirect("login.jsp");
+	  	return;
+	 }
+	 boolean beenDealt = Boolean.parseBoolean(request.getParameter("deal"));
+	 System.out.println(beenDealt);
+%>
 <!DOCTYPE HTML>
 <html xmlns:wb="http://open.weibo.com/wb"><head>
 </script><script type="text/javascript" async="" src="style/js/conversion.js"></script><script src="style/js/allmobilize.min.js" charset="utf-8" id="allmobilize"></script><style type="text/css"></style>
@@ -35,87 +46,83 @@ var youdao_conv_id = 271546;
 <script src="style/js/ajaxCross.json" charset="UTF-8"></script></head>
 <body>
 <div id="body">
-  <% 
-    User user = (User)session.getAttribute("loginUser");
-	  if (user == null) {
-	  	response.sendRedirect("login.jsp");
-	  	return;
-	  }
-  %>
 <div id="header">
-    	<div class="wrapper">
-    		<a class="logo" href="index.jsp">
-    			<img width="229" height="43" alt="拉勾招聘-专注互联网招聘" src="style/images/logo.png">
-    		</a>
-    		<ul id="navheader" class="reset">
-    			<li><a href="index.jsp">首页</a></li>
-        	<% if (user.getUserType().equals("0")){ %>
-    	        <li ><a href="companylist.jsp" >公司</a></li>
-    			<li ><a href="resume.jsp" rel="nofollow">我的简历</a></li>
-    	<% } else { %>
-    	        <li ><a href="myhome.jsp" >公司</a></li>
-	    		<li ><a href="create.jsp" rel="nofollow">发布职位</a></li>
-	    		<li class="current"><a rel="nofollow" href="canInterviewResumes.jsp">简历管理</a></li>
-	    <% } %>
-	    	</ul>
-	    <% if (user == null) { %>
-        	            <ul class="loginTop">
-        	            
-            	<li><a href="login.jsp" rel="nofollow">登录</a></li> 
-            	<li>|</li>
-            	<li><a href="register.jsp" rel="nofollow">注册</a></li>
-            </ul>
-            <% } else {%>
-           <dl class="collapsible_menu">
-            	<dt>
-           			<span><%= user.getUserName() %>&nbsp;</span> 
-            		<span class="red dn" id="noticeDot-0"></span>
-            		<i></i>
-            	</dt>
-         <% if (user.getUserType().equals("0")){ %>
-                <dd><a rel="nofollow" href="resume.jsp">我的简历</a></dd>
-                <dd><a href="collections.jsp">我收藏的职位</a></dd>
-                <dd class="logout"><a rel="nofollow" href="login.jsp">退出</a></dd>
-         <% } else { %>
-                <dd style="display: none;"><a href="create.jsp">我要招人</a></dd>
-                <dd class="btm" style="display: none;"><a href="myhome.jsp">我的公司主页</a></dd>
-                <dd><a href="accountBind.jsp">帐号设置</a></dd>
-                <dd class="logout"><a rel="nofollow" href="login.jsp">退出</a></dd>
-            </dl>
-            <% } } %>
-                                </div>
-    </div><!-- end #header -->
+			<div class="wrapper">
+				<a class="logo" href="index.jsp"> <img width="229" height="43"
+					alt="拉勾招聘-专注互联网招聘" src="style/images/logo.png">
+				</a>
+				<ul id="navheader" class="reset">
+					<li><a href="index.jsp">首页</a></li>
+					<% if (user.getUserType().equals("0")){ %>
+					<li><a href="companylist.jsp">公司</a></li>
+					<li><a href="resume.jsp" rel="nofollow">我的简历</a></li>
+					<% } else { %>
+					<li><a href="myhome.jsp">公司</a></li>
+					<li><a href="create.jsp" rel="nofollow">发布职位</a></li>
+					<li><a rel="nofollow" href="canInterviewResumes.jsp">简历管理</a></li>
+					<% } %>
+				</ul>
+				<% if (user == null) { %>
+				<ul class="loginTop">
+
+					<li><a href="login.jsp" rel="nofollow">登录</a></li>
+					<li>|</li>
+					<li><a href="register.jsp" rel="nofollow">注册</a></li>
+				</ul>
+				<% } else {%>
+				<dl class="collapsible_menu">
+					<dt>
+						<span><%= user.getUserName() %>&nbsp;</span> <span class="red dn"
+							id="noticeDot-0"></span> <i></i>
+					</dt>
+					<% if (user.getUserType().equals("0")){ %>
+					<dd>
+						<a rel="nofollow" href="resume.jsp">我的简历</a>
+					</dd>
+					<dd>
+						<a href="collections.jsp">我收藏的职位</a>
+					</dd>
+					<dd class="logout">
+						<a rel="nofollow" href="login.jsp">退出</a>
+					</dd>
+					<% } else { %>
+					<dd style="display: none;">
+						<a href="create.jsp">我要招人</a>
+					</dd>
+					<dd class="btm" style="display: none;">
+						<a href="myhome.jsp">我的公司主页</a>
+					</dd>
+					<dd>
+						<a href="accountBind.jsp">帐号设置</a>
+					</dd>
+					<dd class="logout">
+						<a rel="nofollow" href="login.jsp">退出</a>
+					</dd>
+				</dl>
+				<% } } %>
+			</div>
+		</div>
+		<!-- end #header -->
     <div id="container">
                 	<div class="sidebar">
-        		            	<a class="btn_create" href="create.html">发布新职位</a>
-            	                <dl class="company_center_aside">
-		<dt>我收到的简历</dt>
-		<dd>
-		<a href="">待处理简历</a> 
-			</dd>
-	<dd class="current">
-		<a href="canInterviewResumes.html">待定简历</a>
-	</dd>
-	<dd>
-		<a href="haveNoticeResumes.html">已通知面试简历</a>
-	</dd>
-	<dd>
-		<a href="haveRefuseResumes.html">不合适简历</a>
-	</dd>
-	<dd class="btm">
-		<a href="autoFilterResumes.html">自动过滤简历</a> 
-			</dd>
-</dl>
-<dl class="company_center_aside">
-		<dt>我发布的职位</dt>
-			<dd>
-		<a href="positions.html">有效职位</a>
-	</dd>
-	<dd>
-		<a href="positions.html">已下线职位</a>
-	</dd>
-	</dl>
-            </div><!-- end .sidebar -->
+				<a class="btn_create" href="create.jsp">发布新职位</a>
+				<dl class="company_center_aside">
+					<dt>我收到的简历</dt>
+					<dd class="<%= beenDealt?"":"current" %>">
+						<a href="canInterviewResumes.jsp?deal=false">待处理简历</a>
+					</dd>
+					<dd class="<%= beenDealt?"current":"" %>">
+						<a href="canInterviewResumes.jsp?deal=true">已处理简历</a>
+					</dd>
+				</dl>
+				<dl class="company_center_aside">
+					<dt>我发布的职位</dt>
+					<dd>
+						<a href="positions.jsp">职位列表</a>
+					</dd>
+				</dl>
+
+			</div><!-- end .sidebar -->
             <div class="content">
             	<dl class="company_center_content">
                     <dt>
