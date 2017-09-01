@@ -2,19 +2,28 @@ package com.jobmanager.mapper;
 
 import java.util.List;
 
-import com.jobmanager.model.Employee;
-import com.jobmanager.model.EmployeeEdu;
-import com.jobmanager.model.EmployeeProject;
-import com.jobmanager.model.EmployeeWokExp;
-import com.jobmanager.model.User;
+import com.jobmanager.model.*;
 /**
- * Mapper”≥…‰¿‡
+ * Mapper”≥ÔøΩÔøΩÔøΩÔøΩ
  * @author qcb
  * @time 2017.7.30
  */
 public interface UserMapper {
 	public User selectUserByName(String userName);
 	public void addUser(User user);
+	
+	public void addPosition(Position position);
+	public void updatePosition(Position position);
+	
+	public void addNewCompany(String userName);
+	public Company selectCompanyByName(String userName);
+	public Company selectCompanyById(int companyId);
+	public void updateShortNameAndFeatures(CompanyNameForm companyNameForm);
+	public void updateLabels(CompanyLabelForm companyLabelForm);
+	public void updateBaseInfo(CompanyBaseInfoForm companyBaseInfoForm);
+	public void updateProductInfo(CompanyProductForm companyProductForm);
+	public void updateProfile(CompanyProfileForm companyProfileForm);
+	
 	
 	public void updateBasciInfo(Employee employee);
 	public Employee findEmployeeByName(String userName);
