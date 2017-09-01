@@ -1,5 +1,16 @@
-﻿<%@ page language="java" import="java.util.*,com.jobmanager.model.User"
+<%@ page language="java" import="java.util.*,com.jobmanager.model.*,org.springframework.web.context.WebApplicationContext
+,org.springframework.web.context.support.WebApplicationContextUtils,com.jobmanager.dao.UserDao"
 	pageEncoding="utf-8"%>
+<% 
+    User user = (User)session.getAttribute("loginUser");
+	 if (user == null) {
+	  	response.sendRedirect("login.jsp");
+	  	return;
+	 }
+	 WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+	 UserDao userDao = (UserDao) wac.getBean("userDaoImpl"); 
+	 Company company = userDao.findCompanyByUserName(user.getUserName());
+%>
 <!DOCTYPE HTML>
 <html xmlns:wb="http://open.weibo.com/wb">
 <head>
@@ -44,13 +55,6 @@ var youdao_conv_id = 271546;
 </head>
 <body>
 	<div id="body">
-		<% 
-    User user = (User)session.getAttribute("loginUser");
-	  if (user == null) {
-	  	response.sendRedirect("login.jsp");
-	  	return;
-	  }
-  %>
 		<div id="header">
 			<div class="wrapper">
 				<a href="index.jsp" class="logo"> <img
@@ -138,42 +142,49 @@ var youdao_conv_id = 271546;
 						     -->
 
 						<div class="c_box companyName">
-							<h2 title="平潭协创进出口贸易有限公司">平潭协创进出口贸易有限公司</h2>
+							<h2 title=<%= company.getCompanyShortName() == null?"请添加公司信息!":company.getCompanyShortName() %>><%= company.getCompanyShortName() == null?"请添加公司信息!":company.getCompanyShortName() %></h2>
 
-							<em class="unvalid"></em> <span class="va dn">拉勾未认证企业</span> <a
-								target="_blank" class="applyC"
-								href="http://www.lagou.com/c/auth.html">申请认证</a>
+							
 							<div class="clear"></div>
 
-							<h1 title="福建平潭协创进出口贸易有限公司" class="fullname">福建平潭协创进出口贸易有限公司</h1>
+							<h1 title=<%= company.getCompanyShortName() == null?"请添加公司信息!":company.getCompanyShortName() %> class="fullname"><%= company.getCompanyShortName() == null?"请添加公司信息!":company.getCompanyShortName() %></h1>
 
 							<form class="clear editDetail dn" id="editDetailForm">
 								<input type="text" placeholder="请输入公司简称" maxlength="15"
-									value="平潭协创进出口贸易有限公司" name="companyShortName"
+									value="<%= company.getCompanyShortName() == null?"":company.getCompanyShortName() %>" name="companyShortName"
 									id="companyShortName"> <input type="text"
 									placeholder="一句话描述公司优势，核心价值，限50字" maxlength="50"
-									value="测试的发打发打发大范德萨发" name="companyFeatures"
+									value="<%= company.getCompanyFeatures() == null?"":company.getCompanyFeatures() %>" name="companyFeatures"
 									id="companyFeatures"> <input type="hidden"
-									value="25927" id="companyId" name="companyId"> <input
+									value="<%= company.getCompanyId() == null?"":company.getCompanyId() %>" id="companyId" name="companyId"> <input
 									type="submit" value="保存" id="saveDetail" class="btn_small">
 								<a id="cancelDetail" class="btn_cancel_s">取消</a>
 							</form>
 
 							<div class="clear oneword">
 								<img width="17" height="15" src="style/images/quote_l.png">&nbsp;
-								<span>测试的发打发打发大范德萨发</span> &nbsp;<img width="17" height="15"
+								<span><%= company.getCompanyFeatures() == null?"请描述公司优势!":company.getCompanyFeatures() %></span> &nbsp;<img width="17" height="15"
 									src="style/images/quote_r.png">
 							</div>
 							<h3 class="dn">已选择标签</h3>
 							<ul style="overflow: auto" id="hasLabels" class="reset clearfix">
-								<li><span>年终分红</span></li>
-								<li><span>五险一金</span></li>
-								<li><span>弹性工作</span></li>
-								<li><span>岗位晋升</span></li>
+							 <% if(company.getLabels()== null || company.getLabels().equals("") ){ %>
+							    <li class="link">点击添加标签</li>
+							 <% 
+							    } else { 
+							     String [] labels = company.getLabels().split(",");
+							     for(int i = 0; i < labels.length; i++) {
+							 %>
+							    <li><span><%= labels[i] %></span></li>
+							 <%  
+							     }
+							 %>
+								
 								<li class="link">编辑</li>
+							<% } %>
+								
 							</ul>
 							<div class="dn" id="addLabels">
-								<a id="changeLabels" class="change" href="javascript:void(0)">换一换</a>
 								<input type="hidden" value="1" id="labelPageNo"> <input
 									type="submit" value="贴上" class="fr" id="add_label"> <input
 									type="text" placeholder="添加自定义标签" name="label" id="label"
@@ -206,14 +217,19 @@ var youdao_conv_id = 271546;
 								</dt>
 								<dd>
 									<div class="addnew">
-										酒香不怕巷子深已经过时啦！<br> 把自己优秀的产品展示出来吸引人才围观吧！<br> <a
-											class="product_edit" href="javascript:void(0)">+添加公司产品</a>
+										酒香不怕巷子深已经过时啦！<br> 把自己优秀的产品展示出来吸引人才围观吧！<br> 
+										<a class="product_edit" href="javascript:void(0)">+添加公司产品</a>
 									</div>
 								</dd>
 							</dl>
-
+                        <%
+                            boolean showNewPorduct = false;
+                           if(company.getProduct()==null || company.getProduct().equals("")){
+                        	   showNewPorduct = true;
+                           } 
+                        %>
 							<!--产品编辑-->
-							<dl id="newProduct" class="newProduct dn">
+							<dl id="newProduct" class="newProduct <%= showNewPorduct ? "" : "dn"  %>">
 								<dt>
 									<h2>
 										<em></em>公司产品
@@ -244,13 +260,13 @@ var youdao_conv_id = 271546;
 										</div>
 
 										<div class="cp_intro">
-											<input type="text" placeholder="请输入产品名称" value="发大发"
+											<input type="text" placeholder="请输入产品名称" value="<%= company.getProduct() %>" 
 												name="product"> <input type="text"
-												placeholder="请输入产品网址" value="http://www.weimob.com"
+												placeholder="请输入产品网址" value="<%= company.getProductUrl() %>"
 												name="productUrl">
 											<textarea placeholder="请简短描述该产品定位、产品特色、用户群体等" maxlength="500"
-												value="发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf"
-												class="s_textarea" name="productProfile">发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf</textarea>
+												value="<%= company.getProductProfile() %>"
+												class="s_textarea" name="productProfile"></textarea>
 											<div class="word_count fr">
 												你还可以输入 <span>500</span> 字
 											</div>
@@ -264,7 +280,7 @@ var youdao_conv_id = 271546;
 								</dd>
 							</dl>
 							<!--有产品-->
-							<dl class="c_product">
+							<dl class="c_product <%= showNewPorduct ? "dn" : ""  %>">
 								<dt>
 									<h2>
 										<em></em>公司产品
@@ -275,7 +291,7 @@ var youdao_conv_id = 271546;
 										src="style/images/product_default.png">
 									<div class="cp_intro">
 										<h3>
-											<a target="_blank" href="http://www.weimob.com">发大发 </a>
+											<a target="_blank" href=<%= company.getProductUrl() %>><%= company.getProduct() %> </a>
 										</h3>
 										<div class="scroll-pane"
 											style="overflow: hidden; padding: 0px; width: 260px;">
@@ -284,14 +300,15 @@ var youdao_conv_id = 271546;
 												style="width: 260px; height: 140px;">
 												<div class="jspPane"
 													style="padding: 0px; top: 0px; width: 260px;">
-													<div>发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf</div>
+													<div><%= company.getProductProfile() %></div>
 												</div>
 											</div>
 										</div>
 									</div>
 									<a title="编辑公司产品" class="c_edit product_edit"
-										href="javascript:void(0)"></a> <a title="新增公司产品"
-										class="c_add product_add" href="javascript:void(0)"></a>
+										href="javascript:void(0)"></a> 
+										<!--  <a title="新增公司产品"
+										class="c_add product_add" href="javascript:void(0)"></a>-->
 								</dd>
 							</dl>
 
@@ -325,7 +342,7 @@ var youdao_conv_id = 271546;
 								<dd>
 									<form id="companyDesForm">
 										<textarea placeholder="请分段详细描述公司简介、企业文化等"
-											name="companyProfile" id="companyProfile">该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎</textarea>
+											name="companyProfile" id="companyProfile"><%= company.getCompanyProfile() %></textarea>
 										<div class="word_count fr">
 											你还可以输入 <span>1000</span> 字
 										</div>
@@ -345,7 +362,7 @@ var youdao_conv_id = 271546;
 									</h2>
 								</dt>
 								<dd>
-									<div class="c_intro">该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎该方法嘎嘎</div>
+									<div class="c_intro"><%= company.getCompanyProfile()==null?"请输入公司介绍":company.getCompanyProfile() %></div>
 									<a title="编辑公司介绍" id="editIntro" class="c_edit"
 										href="javascript:void(0)"></a>
 								</dd>
@@ -366,7 +383,7 @@ var youdao_conv_id = 271546;
 						</dt>
 						<dd>
 							<div class="addnew">
-								发布需要的人才信息，让伯乐和千里马尽快相遇……<br> <a href="create.html">+添加招聘职位</a>
+								发布需要的人才信息，让伯乐和千里马尽快相遇……<br> <a href="create.jsp">+添加招聘职位</a>
 							</div>
 						</dd>
 					</dl>
@@ -385,21 +402,21 @@ var youdao_conv_id = 271546;
 								<tbody>
 									<tr>
 										<td width="45">地点</td>
-										<td>上海</td>
+										<td><%= company.getCity()==null?"请输入地点":company.getCity() %></td>
 									</tr>
 									<tr>
 										<td>领域</td>
 										<!-- 支持多选 -->
-										<td title="移动互联网">移动互联网</td>
+										<td title="移动互联网"><%= company.getIndustryField()==null?"请输入领域":company.getIndustryField() %></td>
 									</tr>
 									<tr>
 										<td>规模</td>
-										<td>150-500人</td>
+										<td><%= company.getCompanySize()==null?"请输入规模":company.getCompanySize() %></td>
 									</tr>
 									<tr>
 										<td>主页</td>
-										<td><a rel="nofollow" title="http://www.weimob.com"
-											target="_blank" href="http://www.weimob.com">http://www.weim...</a>
+										<td><a rel="nofollow" title="<%= company.getCompanyUrl()==null?"请输入主页":company.getCompanyUrl() %>"
+											target="_blank" href="<%= company.getCompanyUrl()==null?"":company.getCompanyUrl() %>"><%= company.getCompanyUrl()==null?"请输入主页":company.getCompanyUrl() %></a>
 										</td>
 									</tr>
 								</tbody>
@@ -412,17 +429,17 @@ var youdao_conv_id = 271546;
 									<tbody>
 										<tr>
 											<td>地点</td>
-											<td><input type="text" placeholder="请输入地点" value="上海"
+											<td><input type="text" placeholder="请输入地点" value="<%= company.getCity()==null?"":company.getCity() %>"
 												name="city" id="city"></td>
 										</tr>
 										<tr>
 											<td>领域</td>
 											<!-- 支持多选 -->
-											<td><input type="hidden" value="移动互联网"
+											<td><input type="hidden" value="<%= company.getIndustryField()==null?"":company.getIndustryField() %>"
 												id="industryField" name="industryField"> <input
 												type="button"
 												style="background: none; cursor: default; border: none !important;"
-												disable="disable" value="移动互联网" id="select_ind"
+												disable="disable" value="<%= company.getIndustryField()==null?"":company.getIndustryField() %>" id="select_ind"
 												class="select_tags"> <!-- <div id="box_ind" class="selectBox dn">
 		                                    <ul class="reset">
 			                                    				                        							                            			<li class="current">移动互联网</li>
@@ -431,34 +448,34 @@ var youdao_conv_id = 271546;
 										</tr>
 										<tr>
 											<td>规模</td>
-											<td><input type="hidden" value="150-500人"
+											<td><input type="hidden" value="<%= company.getCompanySize()==null?"":company.getCompanySize() %>" 
 												id="companySize" name="companySize"> <input
-												type="button" value="150-500人" id="select_sca"
+												type="button" value="<%= company.getCompanySize()==null?"":company.getCompanySize() %>" id="select_sca"
 												class="select_tags">
 												<div class="selectBox dn" id="box_sca"
 													style="display: none;">
 													<ul class="reset">
-														<li>少于15人</li>
-														<li>15-50人</li>
-														<li>50-150人</li>
-														<li class="current">150-500人</li>
-														<li>500-2000人</li>
-														<li>2000人以上</li>
+														<li class="<%= "少于15人".equals(company.getCompanySize())?"current":"" %>">少于15人</li>
+														<li class="<%= "15-50人".equals(company.getCompanySize())?"current":"" %>">15-50人</li>
+														<li class="<%= "50-150人".equals(company.getCompanySize())?"current":"" %>">50-150人</li>
+														<li class="<%= "150-500人".equals(company.getCompanySize())?"current":"" %>">150-500人</li>
+														<li class="<%= "500-2000人".equals(company.getCompanySize())?"current":"" %>">500-2000人</li>
+														<li class="<%= "2000人以上".equals(company.getCompanySize())?"current":"" %>">2000人以上</li>
 													</ul>
 												</div></td>
 										</tr>
 										<tr>
 											<td>主页</td>
 											<td><input type="text" placeholder="请输入网址"
-												value="http://www.weimob.com" name="companyUrl"
+												value="<%= company.getCompanyUrl()==null?"":company.getCompanyUrl() %>" name="companyUrl"
 												id="companyUrl"></td>
 										</tr>
 									</tbody>
 								</table>
-								<input type="hidden" id="comCity" value="上海"> <input
-									type="hidden" id="comInd" value="移动互联网"> <input
-									type="hidden" id="comSize" value="150-500人"> <input
-									type="hidden" id="comUrl" value="http://www.zmtpost.com">
+								<input type="hidden" id="comCity" value="<%= company.getCity()==null?"":company.getCity() %>"> <input
+									type="hidden" id="comInd" value="<%= company.getIndustryField()==null?"":company.getIndustryField() %>"> <input
+									type="hidden" id="comSize" value="<%= company.getCompanySize()==null?"":company.getCompanySize() %>"> <input
+									type="hidden" id="comUrl" value="<%= company.getCompanyUrl()==null?"":company.getCompanyUrl() %>">
 								<input type="submit" value="保存" id="submitFeatures"
 									class="btn_small"> <a id="cancelFeatures"
 									class="btn_cancel_s" href="javascript:void(0)">取消</a>
@@ -547,7 +564,7 @@ avatar.uploadComplate = function( data ){
 			<a rel="nofollow" target="_blank" href="http://e.weibo.com/lagou720">拉勾微博</a>
 			<a rel="nofollow" href="javascript:void(0)" class="footer_qr">拉勾微信<i></i></a>
 			<div class="copyright">
-				&copy;2013-2014 Lagou <a
+				&copy;2017-2018 Lagou <a
 					href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action"
 					target="_blank">京ICP备14023790号-2</a>
 			</div>
