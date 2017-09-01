@@ -17,8 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.jobmanager.dao.UserDao;
-import com.jobmanager.model.EmployeeWokExp;
-import com.jobmanager.model.User;
+import com.jobmanager.model.*;
 
 /**
  * Servlet implementation class CompanyServlet
@@ -59,26 +58,20 @@ System.out.println(url);
 			String 	companyId = request.getParameter("companyId");
 			String 	companyShortName = request.getParameter("companyShortName");
 			String 	companyFeatures = request.getParameter("companyFeatures");
-
+			CompanyNameForm companyNameForm = new CompanyNameForm();
+			companyNameForm.setCompanyId(companyId);
+			companyNameForm.setCompanyShortName(companyShortName);
+			companyNameForm.setCompanyFeatures(companyFeatures);
+			userDao.updateShortNameAndFeatures(companyNameForm);
 			
-System.out.println(companyId + companyShortName + companyFeatures);
-			EmployeeWokExp employeeWokExp = new EmployeeWokExp();
-			employeeWokExp.setUserName(user.getUserName());
-			//userDao.updateEmployeeWokExpInfo(employeeWokExp);
-//			/List<EmployeeWokExp> exps = userDao.findEmployeeWokExpByName(user.getUserName());
-//			String detail;
-//		    JSONArray arr = JSONArray.fromObject(exps);
-//		    System.out.println(arr);
-//			for(int i = 0; i < arr.size(); i++) {
-//				JSONObject obj = arr.getJSONObject(i);
-//				System.out.println(obj.toString());
-//				
-//			}
+			Company company = userDao.findCompanyById(Integer.parseInt(companyId));
+			JSONObject obj = JSONObject.fromObject(company);
+System.out.println(obj.toString());
+
 		
 	        String res="{\"success\": true,\"content\": "  
-	        		+ "{"
-	        		//+ "\"workExperiences\" : " + arr.toString()
-	        		+ "}}"; 
+	        		+ obj.toString()
+	        		+ "}"; 
 	        outputStream.write(res.getBytes("utf-8")); 
 	        outputStream.flush();  
 	        outputStream.close();
@@ -88,26 +81,19 @@ System.out.println(companyId + companyShortName + companyFeatures);
 			UserDao userDao = (UserDao) wac.getBean("userDaoImpl");
 			String 	companyId = request.getParameter("companyId");
 			String 	labels = request.getParameter("labels");
+			CompanyLabelForm companyLabelForm = new CompanyLabelForm();
+			companyLabelForm.setCompanyId(companyId);
+			companyLabelForm.setLabels(labels);
+			userDao.updateLabels(companyLabelForm);
+			
+			Company company = userDao.findCompanyById(Integer.parseInt(companyId));
+			JSONObject obj = JSONObject.fromObject(company);
+			System.out.println(obj.toString());
 
 			
-System.out.println(companyId + labels);
-			EmployeeWokExp employeeWokExp = new EmployeeWokExp();
-			employeeWokExp.setUserName(user.getUserName());
-			//userDao.updateEmployeeWokExpInfo(employeeWokExp);
-//			/List<EmployeeWokExp> exps = userDao.findEmployeeWokExpByName(user.getUserName());
-//			String detail;
-//		    JSONArray arr = JSONArray.fromObject(exps);
-//		    System.out.println(arr);
-//			for(int i = 0; i < arr.size(); i++) {
-//				JSONObject obj = arr.getJSONObject(i);
-//				System.out.println(obj.toString());
-//				
-//			}
-		
 	        String res="{\"success\": true,\"content\": "  
-	        		+ "{"
-	        		//+ "\"workExperiences\" : " + arr.toString()
-	        		+ "}}"; 
+	        		+ obj.toString()
+	        		+ "}"; 
 	        outputStream.write(res.getBytes("utf-8")); 
 	        outputStream.flush();  
 	        outputStream.close();
@@ -120,24 +106,22 @@ System.out.println(companyId + labels);
 			String 	industryField = request.getParameter("industryField");	
 			String 	companySize = request.getParameter("companySize");	
 			String 	companyUrl = request.getParameter("companyUrl");	
-System.out.println(companyId + city + industryField);
-			EmployeeWokExp employeeWokExp = new EmployeeWokExp();
-			employeeWokExp.setUserName(user.getUserName());
-			//userDao.updateEmployeeWokExpInfo(employeeWokExp);
-//			/List<EmployeeWokExp> exps = userDao.findEmployeeWokExpByName(user.getUserName());
-//			String detail;
-//		    JSONArray arr = JSONArray.fromObject(exps);
-//		    System.out.println(arr);
-//			for(int i = 0; i < arr.size(); i++) {
-//				JSONObject obj = arr.getJSONObject(i);
-//				System.out.println(obj.toString());
-//				
-//			}
-		
+		    CompanyBaseInfoForm companyBaseInfoForm = new CompanyBaseInfoForm();
+		    companyBaseInfoForm.setCompanyId(companyId);
+		    companyBaseInfoForm.setCity(city);
+		    companyBaseInfoForm.setIndustryField(industryField);
+		    companyBaseInfoForm.setCompanySize(companySize);
+		    companyBaseInfoForm.setCompanyUrl(companyUrl);
+		    userDao.updateBaseInfo(companyBaseInfoForm);
+		    
+			Company company = userDao.findCompanyById(Integer.parseInt(companyId));
+			JSONObject obj = JSONObject.fromObject(company);
+			System.out.println(obj.toString());
+
+			
 	        String res="{\"success\": true,\"content\": "  
-	        		+ "{"
-	        		//+ "\"workExperiences\" : " + arr.toString()
-	        		+ "}}"; 
+	        		+ obj.toString()
+	        		+ "}"; 
 	        outputStream.write(res.getBytes("utf-8")); 
 	        outputStream.flush();  
 	        outputStream.close();
@@ -149,25 +133,23 @@ System.out.println(companyId + city + industryField);
 			String 	productPicUrl = request.getParameter("productPicUrl");
 			String 	product = request.getParameter("product");	
 			String 	productUrl = request.getParameter("productUrl");	
-			String 	productProfile = request.getParameter("productProfile");	
-System.out.println(companyId + productPicUrl + product);
-			EmployeeWokExp employeeWokExp = new EmployeeWokExp();
-			employeeWokExp.setUserName(user.getUserName());
-			//userDao.updateEmployeeWokExpInfo(employeeWokExp);
-//			/List<EmployeeWokExp> exps = userDao.findEmployeeWokExpByName(user.getUserName());
-//			String detail;
-//		    JSONArray arr = JSONArray.fromObject(exps);
-//		    System.out.println(arr);
-//			for(int i = 0; i < arr.size(); i++) {
-//				JSONObject obj = arr.getJSONObject(i);
-//				System.out.println(obj.toString());
-//				
-//			}
-		
+			String 	productProfile = request.getParameter("productProfile");
+			CompanyProductForm companyProductForm = new CompanyProductForm();
+			companyProductForm.setCompanyId(companyId);
+			companyProductForm.setProductPicUrl(productPicUrl);
+			companyProductForm.setProduct(product);
+			companyProductForm.setProductUrl(productUrl);
+			companyProductForm.setProductProfile(productProfile);
+			userDao.updateProductInfo(companyProductForm);
+			
+			Company company = userDao.findCompanyById(Integer.parseInt(companyId));
+			JSONObject obj = JSONObject.fromObject(company);
+			System.out.println(obj.toString());
+
+			
 	        String res="{\"success\": true,\"content\": "  
-	        		+ "{"
-	        		//+ "\"workExperiences\" : " + arr.toString()
-	        		+ "}}"; 
+	        		+ obj.toString()
+	        		+ "}"; 
 	        outputStream.write(res.getBytes("utf-8")); 
 	        outputStream.flush();  
 	        outputStream.close();
@@ -177,24 +159,19 @@ System.out.println(companyId + productPicUrl + product);
 			UserDao userDao = (UserDao) wac.getBean("userDaoImpl");
 			String 	companyId = request.getParameter("companyId");
 			String 	companyProfile = request.getParameter("companyProfile");	
-System.out.println(companyId + companyProfile);
-			EmployeeWokExp employeeWokExp = new EmployeeWokExp();
-			employeeWokExp.setUserName(user.getUserName());
-			//userDao.updateEmployeeWokExpInfo(employeeWokExp);
-//			/List<EmployeeWokExp> exps = userDao.findEmployeeWokExpByName(user.getUserName());
-//			String detail;
-//		    JSONArray arr = JSONArray.fromObject(exps);
-//		    System.out.println(arr);
-//			for(int i = 0; i < arr.size(); i++) {
-//				JSONObject obj = arr.getJSONObject(i);
-//				System.out.println(obj.toString());
-//				
-//			}
-		
+			CompanyProfileForm companyProfileForm = new CompanyProfileForm();
+			companyProfileForm.setCompanyId(companyId);
+			companyProfileForm.setCompanyProfile(companyProfile);
+			userDao.updateProfile(companyProfileForm);
+			
+			Company company = userDao.findCompanyById(Integer.parseInt(companyId));
+			JSONObject obj = JSONObject.fromObject(company);
+			System.out.println(obj.toString());
+
+			
 	        String res="{\"success\": true,\"content\": "  
-	        		+ "{"
-	        		//+ "\"workExperiences\" : " + arr.toString()
-	        		+ "}}"; 
+	        		+ obj.toString()
+	        		+ "}"; 
 	        outputStream.write(res.getBytes("utf-8")); 
 	        outputStream.flush();  
 	        outputStream.close();
