@@ -9,6 +9,7 @@
       <typeAlias alias="EmployeeEdu" type="com.jobmanager.model.EmployeeEdu"/> 
       <typeAlias alias="EmployeeProject" type="com.jobmanager.model.EmployeeProject"/> 
       <typeAlias alias="EmployeeWokExp" type="com.jobmanager.model.EmployeeWokExp"/> 
+      <typeAlias alias="Company" type="com.jobmanager.model.Company"/> 
    </typeAliases>  
    <!-- 配置Mapper文件的路径 -->
    <mappers>
