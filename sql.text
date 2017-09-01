@@ -80,3 +80,22 @@ CREATE TABLE IF NOT EXISTS `j_company`(
    CONSTRAINT employer_company_info FOREIGN KEY (userName) REFERENCES j_user (userName)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `j_jobs`(
+   `jobId` INT auto_increment primary key,
+   `companyId`  VARCHAR(50) NOT NULL,
+   `positionType` VARCHAR(100) DEFAULT NULL,
+   `positionName` VARCHAR(50) DEFAULT NULL,
+   `department` VARCHAR(100) DEFAULT NULL,
+   `jobNature` VARCHAR(50) DEFAULT NULL,
+   `salaryMin` VARCHAR(20) DEFAULT NULL,
+   `salaryMax` VARCHAR(20) DEFAULT NULL,
+   `workAddress` VARCHAR(200) DEFAULT NULL,
+   `workYear` VARCHAR(50) DEFAULT NULL,
+   `education` VARCHAR(50) DEFAULT NULL,
+   `positionAdvantage` VARCHAR(500) DEFAULT NULL,
+   `positionDetail` VARCHAR(2000) DEFAULT NULL,
+   `positionAddress` VARCHAR(1000) DEFAULT NULL,
+   `email` VARCHAR(100) DEFAULT NULL,
+   CONSTRAINT company_job_rela FOREIGN KEY (companyId) REFERENCES j_company (companyId)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
