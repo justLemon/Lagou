@@ -4,18 +4,29 @@ import java.util.List;
 
 import com.jobmanager.model.*;
 /**
- * DAO½Ó¿Ú²ã
+ * DAOï¿½Ó¿Ú²ï¿½
  * @author qcb
  * @time 2017.7.30
  */
 public interface UserDao {
 	/**
-	 * ¸ù¾ÝÓÃ»§ID²éÑ¯ÓÃ»§ÐÅÏ¢
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½IDï¿½ï¿½Ñ¯ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
 	 * @param id
 	 * @return
 	 */
 	public User findUserByName(String name);
 	public void addUser(User user);
+	
+	public void addPosition(Position position);
+	public void updatePosition(Position position);
+	
+	public Company findCompanyByUserName(String userName);
+	public Company findCompanyById(int companyId);
+	public void updateShortNameAndFeatures(CompanyNameForm companyNameForm);
+	public void updateLabels(CompanyLabelForm companyLabelForm);
+	public void updateBaseInfo(CompanyBaseInfoForm companyBaseInfoForm);
+	public void updateProductInfo(CompanyProductForm companyProductForm);
+	public void updateProfile(CompanyProfileForm companyProfileForm);
 	
 	public void updateBasciInfo(Employee employee);
 	public Employee findEmployeeByName(String name);
