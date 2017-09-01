@@ -10,6 +10,94 @@
     <insert id="addUser" parameterType="com.jobmanager.model.User">  
         insert into j_user(userName,userPasswd,userType) values(#{userName},#{userPasswd},#{userType})  
     </insert>
+    
+    <!--  插入新职位  -->  
+    <insert id="addPosition" parameterType="com.jobmanager.model.Position">  
+        insert into j_jobs(companyId,positionType,positionName,department,jobNature,salaryMin,salaryMax,
+        workAddress,workYear,education,positionAdvantage,positionDetail,positionAddress,email) 
+        values(#{companyId},#{positionType},#{positionName},#{department},#{jobNature},#{salaryMin},#{salaryMax},
+        #{workAddress},#{workYear},#{education},#{positionAdvantage},#{positionDetail},#{positionAddress},#{email})  
+    </insert> 
+    <resultMap id="positions" type="com.jobmanager.model.EmployeeProject">
+      <result column="companyId" property="companyId"/>
+      <result column="projectName" property="projectName"/>
+      <result column="positionName" property="positionName"/>
+      <result column="startMonth" property="startMonth"/>
+      <result column="endMonth" property="endMonth"/>
+      <result column="startYear" property="startYear"/>
+      <result column="endYear" property="endYear"/>
+      <result column="projectRemark" property="projectRemark"/>
+      <result column="projectName" property="projectName"/>
+      <result column="positionName" property="positionName"/>
+      <result column="startMonth" property="startMonth"/>
+      <result column="endMonth" property="endMonth"/>
+      <result column="startYear" property="startYear"/>
+      <result column="endYear" property="endYear"/>
+      <result column="projectRemark" property="projectRemark"/>
+      <result column="projectName" property="projectName"/>
+      <result column="positionName" property="positionName"/>
+      <result column="startMonth" property="startMonth"/>
+      <result column="endMonth" property="endMonth"/>
+      <result column="startYear" property="startYear"/>
+      <result column="endYear" property="endYear"/>
+      <result column="projectRemark" property="projectRemark"/>
+    </resultMap> 
+    <!--  查询职位根据公司  -->  
+    <select id="selectPositionByCompanyId" parameterType="String" resultMap="positions">  
+       select * from j_jobs where companyId = #{companyId}  
+    </select> 
+    <!--  更新公司ShortNameAndFeatures -->  
+    <update id="updatePosition" parameterType="com.jobmanager.model.Position">
+        update j_jobs(positionType,positionName,department,jobNature,salaryMin,salaryMax,
+        workAddress,workYear,education,positionAdvantage,positionDetail,positionAddress,email)
+        set positionType = #{positionType}, positionName = #{positionName}, department = #{department}
+        , jobNature = #{jobNature}, salaryMin = #{salaryMin}, salaryMax = #{salaryMax}
+        , workAddress = #{workAddress}, workYear = #{workYear}, education = #{education}
+        , positionAdvantage = #{positionAdvantage}, positionDetail = #{positionDetail}, positionAddress = #{positionAddress}
+        , email = #{email}
+        where jobId = #{jobId}
+    </update>
+    
+   <!--  初始化新公司 -->  
+    <insert id="addNewCompany" parameterType="String">  
+        insert into j_company(userName) values(#{userName})  
+    </insert>
+   <!--  查询公司 -->  
+    <select id="selectCompanyByName" parameterType="String" resultType="Company">  
+        select * from j_company where userName = #{userName}  
+    </select>
+    <!--  查询公司 -->  
+    <select id="selectCompanyById" parameterType="int" resultType="Company">  
+        select * from j_company where companyId = #{companyId}  
+    </select>
+    <!--  更新公司ShortNameAndFeatures -->  
+    <update id="updateShortNameAndFeatures" parameterType="com.jobmanager.model.CompanyNameForm">
+        update j_company set companyShortName = #{companyShortName}, companyFeatures = #{companyFeatures} 
+        where companyId = #{companyId}
+    </update>
+     <!--  更新公司Labels -->  
+    <update id="updateLabels" parameterType="com.jobmanager.model.CompanyLabelForm">
+        update j_company set labels = #{labels}
+        where companyId = #{companyId}
+    </update>
+    <!--  更新公司BaseInfo -->  
+    <update id="updateBaseInfo" parameterType="com.jobmanager.model.CompanyBaseInfoForm">
+        update j_company set city = #{city}, industryField = #{industryField}, 
+         companySize = #{companySize}, companyUrl = #{companyUrl}
+        where companyId = #{companyId}
+    </update>
+     <!--  更新公司product info -->  
+    <update id="updateProductInfo" parameterType="com.jobmanager.model.CompanyProductForm">
+        update j_company set productPicUrl = #{productPicUrl}, product = #{product}, 
+         productUrl = #{productUrl}, productProfile = #{productProfile}
+        where companyId = #{companyId}
+    </update>
+     <!--  更新公司Labels -->  
+    <update id="updateProfile" parameterType="com.jobmanager.model.CompanyProfileForm">
+        update j_company set companyProfile = #{companyProfile}
+        where companyId = #{companyId}
+    </update>
+    
     <!--  查询应聘者信息  -->  
     <select id="findEmployeeByName" parameterType="String" resultType="Employee">  
        select * from j_employee where userName = #{userName}  
